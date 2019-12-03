@@ -2,19 +2,50 @@ package com.example.androidalarm;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.provider.AlarmClock;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
 
-import org.w3c.dom.Text;
+
+
+
 
 public class MainActivity extends AppCompatActivity {
+
+    //variables for alarm creation
+    String message;
+    boolean monday;
+    boolean tuesday;
+    boolean wednesday;
+    boolean thursday;
+    boolean friday;
+    boolean saturday;
+    boolean sunday;
+    int hours;
+    int minutes;
+    //Intent alarmIntent = new Intent(AlarmClock.ACTION_SET_ALARM);
+    LinearLayout alarmNotification;
+
+
+
+    public MainActivity(){}
+
+    public String getMessage() {
+        return message;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,14 +57,13 @@ public class MainActivity extends AppCompatActivity {
         popUp.setVisibility(View.GONE);
 
         //set alarm notification invisible on start
-        final LinearLayout alarmNotification = (LinearLayout) findViewById(R.id.AlarmPopUp);
+        alarmNotification = (LinearLayout) findViewById(R.id.AlarmPopUp);
         alarmNotification.setVisibility(View.GONE);
 
         //Create variables for data fields in recursive alarm
         final TextInputEditText alarmMessage = (TextInputEditText) findViewById(R.id.RecursiveAlarmMessage);
         final TextInputEditText hour = (TextInputEditText) findViewById(R.id.RecursiveAlarmHours);
         final TextInputEditText minute = (TextInputEditText) findViewById(R.id.RecursiveAlarmMinutes);
-        final TextInputEditText seconds = (TextInputEditText) findViewById(R.id.RecursiveAlarmSeconds);
         final CheckBox mon = (CheckBox) findViewById(R.id.checkBoxM);
         final CheckBox tue = (CheckBox) findViewById(R.id.checkBoxTu);
         final CheckBox wed = (CheckBox) findViewById(R.id.checkBoxW);
@@ -49,11 +79,10 @@ public class MainActivity extends AppCompatActivity {
         recursiveAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //set all fields to empty
-                alarmMessage.setText("");
-                hour.setText("");
-                minute.setText("");
-                seconds.setText("");
+                //set all fields to empty and values to false
+                alarmMessage.setText(" ");
+                hour.setText("0");
+                minute.setText("0");
                 mon.setChecked(false);
                 tue.setChecked(false);
                 wed.setChecked(false);
@@ -61,6 +90,13 @@ public class MainActivity extends AppCompatActivity {
                 fri.setChecked(false);
                 sat.setChecked(false);
                 sun.setChecked(false);
+                monday = false;
+                tuesday = false;
+                wednesday = false;
+                thursday = false;
+                friday = false;
+                saturday  = false;
+                sunday = false;
 
                 popUp.setVisibility(View.VISIBLE);
             }
@@ -71,6 +107,34 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //store data in variables
+                message = alarmMessage.getText().toString();
+                if(mon.isChecked()){
+                    monday=true;
+                }
+                if(tue.isChecked()){
+                    tuesday=true;
+                }
+                if(wed.isChecked()){
+                    wednesday=true;
+                }
+                if(thu.isChecked()){
+                    thursday=true;
+                }
+                if(fri.isChecked()){
+                    friday=true;
+                }
+                if(sat.isChecked()){
+                    saturday=true;
+                }
+                if(sun.isChecked()){
+                    sunday=true;
+                }
+                hours= Integer.parseInt(hour.getText().toString());
+                minutes= Integer.parseInt(minute.getText().toString());
+
+
+                //create the alarm
+                startAlert(hours, minutes, message);
 
 
                 //close popup when done
@@ -89,5 +153,12 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+    public void startAlert(int hours, int minutes, String message) {
 
+        Intent intent = new Intent(this, Broadcast.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getApplicationContext(), 234324243, intent, 0);
+        AlarmManager alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + ((minutes * 1000 *60) + (hours *1000*60*60)), pendingIntent);
+        Toast.makeText(this, "Alarm set in " + hours + " hours and " + minutes + " minutes", Toast.LENGTH_LONG).show();
+}
 }

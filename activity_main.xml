@@ -314,18 +314,7 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="120dp"
-                    android:layout_height="wrap_content">
 
-                    <com.google.android.material.textfield.TextInputEditText
-
-                        android:id="@+id/RecursiveAlarmSeconds"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="SS"
-                        android:inputType="time"/>
-                </com.google.android.material.textfield.TextInputLayout>
             </TableRow>
         </TableLayout>
 
