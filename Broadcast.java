@@ -1,6 +1,8 @@
 package com.example.androidalarm;
 
 import android.app.Activity;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -17,17 +19,15 @@ import java.text.SimpleDateFormat;
 public class Broadcast extends BroadcastReceiver {
 
    public static final String MESSAGE = "MESSAGE";
-    public static final String CHANNEL_ID= "NOTIFICATION";
 
     @Override
     public void onReceive(Context context, Intent intent) {
         Date currentTime = Calendar.getInstance().getTime();
         SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy HH:mm");
-        Toast.makeText(context, formatter.format(currentTime) + " Message: " + intent.getStringExtra("MESSAGE") , Toast.LENGTH_LONG).show();
-        //NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
-        //        .setContentTitle("Alarm")
-        //        .setContentText(intent.getStringExtra("MESSAGE")
-        //        .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+        Toast.makeText(context, formatter.format(currentTime) + " Message: " + intent.getStringExtra("MESSAGE") + "\nLocation: " + intent.getStringExtra("location") , Toast.LENGTH_LONG).show();
+
+
+
     }
 
 }

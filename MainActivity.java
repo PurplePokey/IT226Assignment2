@@ -3,9 +3,11 @@ package com.example.androidalarm;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 
 import android.app.AlarmManager;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -460,19 +462,19 @@ public class MainActivity extends AppCompatActivity {
 
         Intent intent = new Intent(this, Broadcast.class);
         intent.putExtra(Broadcast.MESSAGE, messageOT);
-
-
+        intent.putExtra("location", location.getLatitude()+ "\n" + location.getLongitude());
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getApplicationContext(), 234324243, intent, 0);
         AlarmManager alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
 
+
         if (value==1) {
 
-            alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + ((minutes * 1000 * 60) + (hours * 1000 * 60 * 60)), pendingIntent);
+            alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + ((minutes * 1000 * 6) + (hours * 1000 * 60 * 60)), pendingIntent);
+
             Toast.makeText(this, "Alarm set in " + hours + " hours and " + minutes + " minutes", Toast.LENGTH_LONG).show();
         }
         else{
-
             Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis(System.currentTimeMillis());
             calendar.set(Calendar.HOUR_OF_DAY, hours);
@@ -482,6 +484,17 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "Alarm set for " + hours + ":"+ minutes, Toast.LENGTH_LONG).show();
         }
 
+    }
+    public void addNotification() {
+        NotificationCompat.Builder builder =
+                new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .setContentTitle("Alarm")
+                        .setContentText("messageOT");
+
+        // Add as notification
+        NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        manager.notify(0, builder.build());
     }
 }
 
